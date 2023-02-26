@@ -16,7 +16,7 @@ steps:
   args:
   - run
   - --image=gcr.io/${_PROJECT}/${_CONTAINERNAME}:${SHORT_SHA}
-  - --location={_ZONE}
+  - --location=${_ZONE}
   - --cluster=${_GKE_CLUSTER}
   
 substitutions:
