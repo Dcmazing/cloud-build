@@ -1,23 +1,23 @@
 steps:
 #First Clone from Google Cloud Source Repository  
 - name: 'gcr.io/cloud-builders/git'
-  args: ['clone','https://github.com/Dcmazing/${_CONTAINERNAME}.git']
+  args: ['clone','https://github.com/Dcmazing/${_REPO_NAME}.git']
 
 #Build the image 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build','-t','gcr.io/${_PROJECT}/${_CONTAINERNAME}:${_VERSION}','.']
+  args: ['build','-t','gcr.io/${_PROJECT}/${_CONTAINERNAME}:${SHORT_SHA}','.']
 
 #Push the image  
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push','gcr.io/${_PROJECT}/${_CONTAINERNAME}:${_VERSION}']
+  args: ['push','gcr.io/${_PROJECT}/${_CONTAINERNAME}:${SHORT_SHA}']
   
 #Update the container image using kubectl set
-- name: 'gcr.io/cloud-builders/kubectl'
+- name: 'gcr.io/cloud-builders/gke-deploy'
   args:
   - 'set'
   - 'image'
   - 'deployment/${_DEPLOYMENTNAME}'
-  - '${_CONTAINERNAME}=gcr.io/${_PROJECT}/${_CONTAINERNAME}:${_VERSION}'
+  - '${_CONTAINERNAME}=gcr.io/${_PROJECT}/${_CONTAINERNAME}:${SHORT_SHA}'
   env:
   - 'CLOUDSDK_COMPUTE_ZONE=${_ZONE}'
   - 'CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}'
@@ -32,10 +32,7 @@ substitutions:
     _DEPLOYMENTNAME: cloud-build
     _CONTAINERNAME: cloud-build  
     _REPO_NAME: cloud-build
-    
-    # Developers ONLY change
-    _VERSION: v1.0
-    
+
 options:
     substitution_option: 'ALLOW_LOOSE'
 
