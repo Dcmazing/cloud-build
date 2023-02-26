@@ -18,7 +18,7 @@ steps:
   - --filename=kubernetes-resource-file
   - --image=gcr.io/${_PROJECT}/${_CONTAINERNAME}:${SHORT_SHA}
   - --location={_ZONE}
-  - --cluster=${_GKE_CLUSTER
+  - --cluster=${_GKE_CLUSTER}
   
 substitutions:
     #GCP Specific configuration. Please DON'T change anything
