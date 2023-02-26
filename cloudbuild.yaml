@@ -18,7 +18,7 @@ steps:
 - name: 'gcr.io/cloud-builders/gke-deploy'
   args:
   - run
-  - --image=gcr.io/poc-ni-rei/cloud-build:517a872
+  - --image=gcr.io/${_PROJECT}/${_CONTAINERNAME}:${SHORT_SHA}
   - --location=${_ZONE}
   - --cluster=${_GKE_CLUSTER}
   waitFor: ['job3']
