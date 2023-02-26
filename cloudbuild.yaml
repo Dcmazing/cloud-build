@@ -1,7 +1,7 @@
 steps:
 #First Clone from Google Cloud Source Repository  
 - name: 'gcr.io/cloud-builders/git'
-  args: ['clone','https://github.com/Dcmazing/${{_CONTAINERNAME}.git']
+  args: ['clone','https://github.com/Dcmazing/${_CONTAINERNAME}.git']
 
 #Build the image 
 - name: 'gcr.io/cloud-builders/docker'
