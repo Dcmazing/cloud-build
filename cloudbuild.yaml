@@ -2,15 +2,18 @@ steps:
 #First Clone from Google Cloud Source Repository  
 - name: 'gcr.io/cloud-builders/git'
   args: ['clone','https://github.com/Dcmazing/${_REPO_NAME}.git']
+  id: job1
 
 #Build the image 
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build','-t','gcr.io/${_PROJECT}/${_CONTAINERNAME}:${SHORT_SHA}','.']
-
+  id: job2
+  waitFor: ['-']
 #Push the image  
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push','gcr.io/${_PROJECT}/${_CONTAINERNAME}:${SHORT_SHA}']
-  
+  id: job3
+  waitFor: ['job1, job2']
 #Update the container image using kubectl set
 - name: 'gcr.io/cloud-builders/gke-deploy'
   args:
@@ -18,7 +21,7 @@ steps:
   - --image=gcr.io/${_PROJECT}/${_CONTAINERNAME}:${SHORT_SHA}
   - --location=${_ZONE}
   - --cluster=${_GKE_CLUSTER}
-  
+  waitFor: ['job3']
 substitutions:
     #GCP Specific configuration. Please DON'T change anything
     _PROJECT: poc-ni-rei
